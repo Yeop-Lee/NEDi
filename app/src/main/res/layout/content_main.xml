@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".MainActivity"
+    tools:showIn="@layout/activity_main">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:background="@drawable/bg_profile_view">
+
+            <TextView
+                android:id="@+id/text_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/divider_name"
+                android:text="홍길동" />
+
+            <TextView
+                android:id="@+id/divider_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_toLeftOf="@+id/text_sex"
+                android:text="|"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/text_sex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="남자" />
+
+            <TextView
+                android:id="@+id/divider_sex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_toRightOf="@+id/text_sex"
+                android:text="|"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/text_age"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/divider_sex"
+                android:text="12세" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_sleep"
+            android:layout_width="match_parent"
+            android:layout_height="85dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/bg_sleep">
+
+            <ImageView
+                android:id="@+id/icon_sleep"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/icon_sleep" />
+
+            <TextView
+                android:id="@+id/text_header_sleep"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@+id/icon_sleep"
+                android:text="수면기록"
+                android:textColor="@color/colorWhite"
+                android:textSize="35dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/text_lastsleep"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/text_header_sleep"
+                android:layout_marginLeft="30dp"
+                android:layout_toRightOf="@+id/icon_sleep"
+                android:text="이전 기록 "
+                android:textColor="@color/colorWhite"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/text_sleep"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/text_header_sleep"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/text_lastsleep"
+                android:text="오후 12시 27분"
+                android:textColor="@color/colorWhite"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_meal"
+            android:layout_width="match_parent"
+            android:layout_height="85dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/bg_meal">
+
+            <ImageView
+                android:id="@+id/icon_meal"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/icon_meal" />
+
+            <TextView
+                android:id="@+id/text_header_meal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@+id/icon_meal"
+                android:text="식사 기록"
+                android:textColor="@color/colorWhite"
+                android:textSize="35dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/text_lastmeal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/text_header_meal"
+                android:layout_marginLeft="30dp"
+                android:layout_toRightOf="@+id/icon_meal"
+                android:text="이전 기록 "
+                android:textColor="@color/colorWhite"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/text_meal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/text_header_meal"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/text_lastmeal"
+                android:text="오후 12시 27분"
+                android:textColor="@color/colorWhite"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_drink"
+            android:layout_width="match_parent"
+            android:layout_height="85dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/bg_drink">
+
+            <ImageView
+                android:id="@+id/icon_drink"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/icon_drink" />
+
+            <TextView
+                android:id="@+id/text_header_drink"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@+id/icon_drink"
+                android:text="수분 섭취 기록"
+                android:textColor="@color/colorWhite"
+                android:textSize="35dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/text_lastdrink"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/text_header_drink"
+                android:layout_marginLeft="30dp"
+                android:layout_toRightOf="@+id/icon_drink"
+                android:text="오늘 하루"
+                android:textColor="@color/colorWhite"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/text_drink"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/text_header_drink"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/text_lastdrink"
+                android:text="350cc"
+                android:textColor="@color/colorWhite"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_urine"
+            android:layout_width="match_parent"
+            android:layout_height="85dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/bg_urine">
+
+            <ImageView
+                android:id="@+id/icon_urine"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/icon_urine" />
+
+            <TextView
+                android:id="@+id/text_header_urine"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@+id/icon_urine"
+                android:text="소변 측정 기록"
+                android:textColor="@color/colorWhite"
+                android:textSize="35dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/text_lasturine"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/text_header_urine"
+                android:layout_marginLeft="30dp"
+                android:layout_toRightOf="@+id/icon_urine"
+                android:text="오늘 하루"
+                android:textColor="@color/colorWhite"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/text_urine"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/text_header_urine"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/text_lasturine"
+                android:text="300cc"
+                android:textColor="@color/colorWhite"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"></FrameLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:background="@drawable/bg_sponser" />
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

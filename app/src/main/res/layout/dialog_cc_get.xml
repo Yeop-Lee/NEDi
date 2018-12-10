@@ -1,0 +1,59 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <TextView
+        android:id="@+id/msg_cc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="일반적인 종이컵의 한 컵은 " />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/msg_cc"
+        android:layout_centerHorizontal="true"
+        android:text=" 약 190cc 정도의 용량이 됩니다." />
+
+
+    <NumberPicker
+        android:id="@+id/numberPickerCC"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="64dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/numberPickerCC"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="80dp"
+        android:layout_toRightOf="@+id/numberPickerCC"
+        android:text="cc"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/numberPickerCC"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="98dp"
+        android:layout_toRightOf="@+id/numberPickerCC"
+        android:text="확인" />
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/button2"
+        android:layout_alignBottom="@+id/button2"
+        android:layout_marginRight="16dp"
+        android:layout_toLeftOf="@+id/numberPickerCC"
+        android:text="취소" />
+
+</RelativeLayout>
