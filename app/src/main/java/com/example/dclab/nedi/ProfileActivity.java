@@ -36,7 +36,7 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         Log.e("Profile_activity", "Success");
@@ -46,33 +46,19 @@ public class ProfileActivity extends AppCompatActivity {
         profileBuf[1] = intent.getStringExtra(SET_SEX);
         profileBuf[2] = intent.getStringExtra(SET_AGE);
 
-        BoyOrGirl = (RadioGroup) findViewById(R.id.radioGroup);
-        male = (RadioButton) findViewById(R.id.set_male);
-        female = (RadioButton) findViewById(R.id.set_female);
-        button_set_profile = (Button) findViewById(R.id.Button_profile_set);
+        BoyOrGirl = findViewById(R.id.radioGroup);
+        male = findViewById(R.id.set_male);
+        female = findViewById(R.id.set_female);
+        button_set_profile = findViewById(R.id.Button_profile_set);
         button_set_profile.setOnClickListener(profileOnClickListener);
 
-        set_name = (EditText) findViewById(R.id.set_name);
-        set_age = (NumberPicker) findViewById(R.id.set_age);
+        set_name = findViewById(R.id.set_name);
+        set_age = findViewById(R.id.set_age);
         set_age.setMinValue(0);
         set_age.setMaxValue(Age.length - 1);
         set_age.setDisplayedValues(Age);
         set_age.setValue(7);//12세
         set_age.setWrapSelectorWheel(true);
-
-
-//        set_sex = (EditText) findViewById(R.id.EditText_getsex);
-//        set_age = (EditText) findViewById(R.id.EditText_getage);
-
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
-
     }
 
     Button.OnClickListener profileOnClickListener = new View.OnClickListener() {

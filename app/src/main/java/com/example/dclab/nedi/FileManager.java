@@ -2,6 +2,7 @@ package com.example.dclab.nedi;
 
 import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -28,10 +29,18 @@ public class FileManager {
     private String[] eventType = {"Water cc", "Meal Time", "Sleep Time", "Urin cc"};
     private String[] read_profile = {null, null, null};
     private ArrayList<String> savedFileName;
+
+    private Map<String, String> logTotal = new HashMap<>();
+    private Map<String, String> logSleepTime = new HashMap<>();
+    private Map<String, String> logMealTime = new HashMap<>();
+    private Map<String, String> logDrink = new HashMap<>();
+    private Map<String, String> logUrine = new HashMap<>();
+
     private ArrayList<String> viewListFofFile;
     private Map<String, String> mappingFileNameAndList;
 
     private int fileLimit = 5;
+    private final String[] mDays = {"오늘", "어제"};
 
     public FileManager() {
 
@@ -43,14 +52,18 @@ public class FileManager {
             Log.e(TAG, "cannot save");
         } else {
             read_profile = profile;
-            filename = setFileName(patientNum);
+            if (time[0].equals(mDays[0])) {
+                filename = setFileName(patientNum);
+            } else {
+                filename = setFileName_Yesterday(patientNum);
+            }
             FileOutputStream fos;
             createFile(filename);
             try {
                 fos = new FileOutputStream((STRSAVEPATH + filename), true);
                 String text = "";
                 text += String.format("%s,%s,%s,%s,%s", profile[0], profile[1], profile[2], eventType[type], event);
-                text += String.format(", %s, %s : %s", time[0], time[1], time[2]);
+                text += String.format(", %s,%s %s", time[0], time[1], time[2]);
                 text += "\n";
                 fos.write(text.getBytes());
                 fos.close();
@@ -59,6 +72,19 @@ public class FileManager {
             }
         }
 
+    }
+
+    public void loadByName(String fname) {
+        filename = fname;
+        File dir = makeDirectory(STRSAVEPATH);
+        File file = new File(STRSAVEPATH + filename);
+
+        if (isFileExist(file) == false) {
+            Log.v(TAG, "Fail LOAD DATA");
+        } else {
+            Log.v(TAG, "LOAD DATA");
+            parseData();
+        }
     }
 
     public void loadUserFile(int patientNum) {
@@ -171,19 +197,24 @@ public class FileManager {
         Log.d(TAG, "LOAD PARSING::PROFILE::" + temp[0] + ":" + temp[1] + ":" + temp[2]);
         Log.d(TAG, "LOAD PARSING::EVENT TYPE::" + temp[3]);
         temp[3] = String.valueOf(temp[3]);
+        logTotal.put(temp[6], temp[4]);
         if (temp[3].equals(eventType[0])) {       //water
             todayDrink += Integer.valueOf(temp[4]);
             preSetter[0] = temp[4];
+            logDrink.put(temp[6], temp[4]);
             Log.d(TAG, "LOAD PARSING::EVENT water::" + temp[4]);
         } else if (temp[3].equals(eventType[1])) {  //meal
-            preSetter[1] = temp[4];
+            preSetter[1] = temp[6] + " (" + temp[4] + ")";
+            logMealTime.put(temp[6], temp[4]);
             Log.d(TAG, "LOAD PARSING::EVENT meal::" + temp[4]);
         } else if (temp[3].equals(eventType[2])) {  //sleep
-            preSetter[2] = temp[4];
+            preSetter[2] = temp[6] + " (" + temp[4] + ")";
+            logSleepTime.put(temp[6], temp[4]);
             Log.d(TAG, "LOAD PARSING::EVENT sleep::" + temp[4]);
         } else if (temp[3].equals(eventType[3])) {  //urine
             todayUrine += Integer.valueOf(temp[4]);
             preSetter[3] = temp[4];
+            logUrine.put(temp[6], temp[4]);
             Log.d(TAG, "LOAD PARSING::EVENT urine::" + temp[4]);
         }
     }
@@ -240,6 +271,22 @@ public class FileManager {
 
     public ArrayList<String> getSavedFileName() {
         return savedFileName;
+    }
+
+    public Map<String, String> getLogSleepTime() {
+        return logSleepTime;
+    }
+
+    public Map<String, String> getLogMealTime() {
+        return logMealTime;
+    }
+
+    public Map<String, String> getLogDrink() {
+        return logDrink;
+    }
+
+    public Map<String, String> getLogUrine() {
+        return logUrine;
     }
 
     //    public Map<String,String> getMappingFileNameAndList() {

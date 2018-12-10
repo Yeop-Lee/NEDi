@@ -226,7 +226,6 @@ public class MainActivity extends AppCompatActivity {
                         text_last_sleepTime.setText(timer[1] + " " + timer[2] + " (" + tempEventText + ")");
                     }
 //                    Toast.makeText(MainActivity.this,timer[0]+timer[1]+timer[2], Toast.LENGTH_SHORT).show();
-//                    buttonSleep.setText(String.valueOf(np.getValue())); //set the value to textview
                     d.dismiss();
                 }
             });
@@ -271,7 +270,6 @@ public class MainActivity extends AppCompatActivity {
                         showCCCheker(thisType);
                     }
 //                    Toast.makeText(MainActivity.this,timer[0]+timer[1]+timer[2], Toast.LENGTH_SHORT).show();
-//                    buttonSleep.setText(String.valueOf(np.getValue())); //set the value to textview
                     d.dismiss();
                 }
             });
@@ -313,7 +311,6 @@ public class MainActivity extends AppCompatActivity {
                     text_today_urine.setText(String.valueOf(today_urine) + "cc");
                 }
 //                    Toast.makeText(MainActivity.this,timer[0]+timer[1]+timer[2], Toast.LENGTH_SHORT).show();
-//                    buttonSleep.setText(String.valueOf(np.getValue())); //set the value to textview
                 d.dismiss();
             }
         });
@@ -335,6 +332,9 @@ public class MainActivity extends AppCompatActivity {
                 String selectedText = items[pos].toString();
 //                            String filename = Dictionary.get(selectedText);
                 Toast.makeText(MainActivity.this, selectedText, Toast.LENGTH_SHORT).show();
+                final Intent intent = new Intent(getApplicationContext(), DiaryList.class);
+                intent.putExtra(DiaryList.FILENAME, selectedText);
+                startActivity(intent);
             }
         });
         builder.show();
@@ -358,8 +358,7 @@ public class MainActivity extends AppCompatActivity {
                 } else if (selectedText.equals(ExtraMenuList[1])) {
                     showSavedList();
                 } else if (selectedText.equals(ExtraMenuList[2])) {
-                    final Intent intent = new Intent(getApplicationContext(), DiaryList.class);
-                    startActivity(intent);
+
                 }
             }
         });
@@ -385,6 +384,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
         profile = mFileManager.getRead_profile();
+        String[] preSetter = mFileManager.getPreSetter();
         today_drink = mFileManager.getTodayDrink();
         today_urine = mFileManager.getTodayUrine();
 
@@ -399,6 +399,16 @@ public class MainActivity extends AppCompatActivity {
         text_profile_name.setText(profile[0]);
         text_profile_sex.setText(profile[1]);
         text_profile_age.setText(profile[2]);
+        if (preSetter[1] != null){
+            text_last_mealTime.setText(preSetter[1]);
+        }else{
+            text_last_mealTime.setText("기록 없음");
+        }
+        if (preSetter[1] != null){
+            text_last_sleepTime.setText(preSetter[2]);
+        }else{
+            text_last_sleepTime.setText("기록 없음");
+        }
         text_today_drink.setText(String.valueOf(today_drink) + "cc");
         text_today_urine.setText(String.valueOf(today_urine) + "cc");
     }
