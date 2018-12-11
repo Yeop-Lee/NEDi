@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        setTitle("");
 
         Button goProfile = findViewById(R.id.button_go_profile);
         Button extra = findViewById(R.id.button_extra);
