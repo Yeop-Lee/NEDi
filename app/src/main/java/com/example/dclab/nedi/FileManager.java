@@ -88,7 +88,7 @@ public class FileManager {
             parseData();
         }
     }
-    public Boolean loadByNameYesterday(String fname) {
+    public Boolean loadByNameTomorrow(String fname) {
         String client_id = fname.split("_")[0];
         String yesterdayAsString = "";
         SimpleDateFormat formatter = new SimpleDateFormat(client_id+"_yyMMdd", Locale.getDefault());
@@ -96,12 +96,13 @@ public class FileManager {
             Date date = formatter.parse(fname);
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
-            calendar.add(Calendar.DATE, -1);
+            calendar.add(Calendar.DATE, +1);
             yesterdayAsString = formatter.format(calendar.getTime());
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        filename = yesterdayAsString;
+        filename = yesterdayAsString+".csv";
+        Log.i("Tomorrow file",filename);
         File dir = makeDirectory(STRSAVEPATH);
         File file = new File(STRSAVEPATH + filename);
 
@@ -109,10 +110,10 @@ public class FileManager {
             Log.v(TAG, "Fail LOAD DATA");
             return false;
         } else {
-            Log.v(TAG, "LOAD DATA");
+            Log.v(TAG, "Success LOAD DATA");
             parseData();
+            return true;
         }
-        return true;
     }
 
     public void loadUserFile(int patientNum) {
