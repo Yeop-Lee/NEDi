@@ -366,7 +366,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int pos) {
                 String selectedText = items[pos].toString();
 //                            String filename = Dictionary.get(selectedText);
-                Toast.makeText(MainActivity.this, selectedText, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity.this, selectedText, Toast.LENGTH_SHORT).show();
                 final Intent intent = new Intent(getApplicationContext(), DiaryListActivity.class);
                 intent.putExtra(DiaryListActivity.FILENAME, selectedText);
                 startActivity(intent);
