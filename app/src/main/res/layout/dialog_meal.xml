@@ -3,6 +3,7 @@
     android:layout_height="fill_parent">
 
     <RadioGroup
+        android:id="@+id/radio_meal_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"

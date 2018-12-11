@@ -52,6 +52,7 @@ public class ProfileActivity extends AppCompatActivity {
         button_set_profile = findViewById(R.id.Button_profile_set);
         button_set_profile.setOnClickListener(profileOnClickListener);
 
+        BoyOrGirl.check(R.id.set_female);
         set_name = findViewById(R.id.set_name);
         set_age = findViewById(R.id.set_age);
         set_age.setMinValue(0);

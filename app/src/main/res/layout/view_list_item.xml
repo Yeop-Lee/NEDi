@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/diary_list_layout"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@drawable/bg_sleep">
+
+        <TextView
+            android:id="@+id/diary_list_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_centerVertical="true"
+            android:textStyle="bold"
+            android:textSize="25dp"
+            android:textColor="@color/colorWhite"
+            android:text="오후 3시 15분"/>
+
+        <TextView
+            android:id="@+id/diary_list_contents"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="25dp"
+            android:layout_toRightOf="@+id/diary_list_time"
+            android:textStyle="bold"
+            android:textSize="25dp"
+            android:textColor="@color/colorWhite"
+            android:text="기상"/>
+
+        <ImageView
+            android:id="@+id/diary_list_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/icon_sleep"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
+
+</FrameLayout>

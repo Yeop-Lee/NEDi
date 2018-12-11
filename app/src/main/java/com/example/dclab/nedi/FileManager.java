@@ -2,18 +2,24 @@ package com.example.dclab.nedi;
 
 import android.os.Environment;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class FileManager {
@@ -30,16 +36,12 @@ public class FileManager {
     private String[] read_profile = {null, null, null};
     private ArrayList<String> savedFileName;
 
-    private Map<String, String> logTotal = new HashMap<>();
-    private Map<String, String> logSleepTime = new HashMap<>();
-    private Map<String, String> logMealTime = new HashMap<>();
-    private Map<String, String> logDrink = new HashMap<>();
-    private Map<String, String> logUrine = new HashMap<>();
+    private ArrayList<DiaryData> allData = new ArrayList<DiaryData>();
 
     private ArrayList<String> viewListFofFile;
     private Map<String, String> mappingFileNameAndList;
 
-    private int fileLimit = 5;
+    private int fileLimit = 10;
     private final String[] mDays = {"오늘", "어제"};
 
     public FileManager() {
@@ -86,6 +88,32 @@ public class FileManager {
             parseData();
         }
     }
+    public Boolean loadByNameYesterday(String fname) {
+        String client_id = fname.split("_")[0];
+        String yesterdayAsString = "";
+        SimpleDateFormat formatter = new SimpleDateFormat(client_id+"_yyMMdd", Locale.getDefault());
+        try {
+            Date date = formatter.parse(fname);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.add(Calendar.DATE, -1);
+            yesterdayAsString = formatter.format(calendar.getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        filename = yesterdayAsString;
+        File dir = makeDirectory(STRSAVEPATH);
+        File file = new File(STRSAVEPATH + filename);
+
+        if (isFileExist(file) == false) {
+            Log.v(TAG, "Fail LOAD DATA");
+            return false;
+        } else {
+            Log.v(TAG, "LOAD DATA");
+            parseData();
+        }
+        return true;
+    }
 
     public void loadUserFile(int patientNum) {
         filename = setFileName(patientNum);
@@ -101,6 +129,25 @@ public class FileManager {
         } else {
             Log.v(TAG, "LOAD DATA");
             parseData();
+        }
+
+        allData = sortedByTime(allData);
+        for (int i = 0; i<allData.size();i++){
+            if (allData.get(i).EventType.equals(eventType[0])) {       //water
+                todayDrink += Integer.valueOf(allData.get(i).EventContents);
+                preSetter[0] = allData.get(i).EventContents;
+//                Log.d(TAG, "LOAD PARSING::EVENT water::" + allData.get(i).EventContents);
+            } else if (allData.get(i).EventType.equals(eventType[1])) {  //meal
+                preSetter[1] = allData.get(i).EventTime + " (" + allData.get(i).EventContents + ")";
+//                Log.d(TAG, "LOAD PARSING::EVENT meal::" + allData.get(i).EventContents);
+            } else if (allData.get(i).EventType.equals(eventType[2])) {  //sleep
+                preSetter[2] = allData.get(i).EventTime + " (" + allData.get(i).EventContents + ")";
+//                Log.d(TAG, "LOAD PARSING::EVENT sleep::" +allData.get(i).EventContents);
+            } else if (allData.get(i).EventType.equals(eventType[3])) {  //urine
+                todayUrine += Integer.valueOf(allData.get(i).EventContents);
+                preSetter[3] = allData.get(i).EventContents;
+//                Log.d(TAG, "LOAD PARSING::EVENT urine::" + allData.get(i).EventContents);
+            }
         }
     }
 
@@ -127,6 +174,59 @@ public class FileManager {
         }
     }
 
+    public void reviseFile(String fname, ArrayList<DiaryData> totalData) {
+        filename = fname;
+        FileWriter fw = null;
+        try {
+            fw = new FileWriter(STRSAVEPATH + filename);
+            PrintWriter pw = new PrintWriter(fw);
+            pw.write("");
+            pw.flush();
+            pw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        FileOutputStream fos;
+        createFile(filename);
+        try {
+            fos = new FileOutputStream((STRSAVEPATH + filename), true);
+            totalData = this.sortedByTime(totalData);
+            for (int i = 0; i < totalData.size(); i++) {
+                String text = "";
+                text += String.format("%s,%s,%s,%s,%s",
+                        totalData.get(i).EventProfile[0],
+                        totalData.get(i).EventProfile[1],
+                        totalData.get(i).EventProfile[2],
+                        totalData.get(i).EventType,
+                        totalData.get(i).EventContents);
+                text += String.format(", %s,%s", "오늘", totalData.get(i).EventTime);
+                text += "\n";
+                fos.write(text.getBytes());
+            }
+            fos.close();
+        } catch (IOException e) {
+            Log.w(TAG, "ERROR: saveUserData");
+        }
+    }
+
+    public ArrayList<DiaryData> sortedByTime(ArrayList<DiaryData> totalData) {
+        Collections.sort(totalData, new Comparator<DiaryData>() {
+            @Override
+            public int compare(DiaryData o1, DiaryData o2) {
+                try {
+                    SimpleDateFormat formatter = new SimpleDateFormat("a hh시 mm분", Locale.getDefault());
+                    Date date1 = formatter.parse(o1.EventTime);
+                    Date date2 = formatter.parse(o2.EventTime);
+                    return date1.compareTo(date2);
+                } catch (ParseException e1) {
+                    e1.printStackTrace();
+                }
+                return 0;
+            }
+        });
+
+        return totalData;
+    }
 
     private String setFileName(int patientNum) {
         Calendar c = Calendar.getInstance();
@@ -167,21 +267,19 @@ public class FileManager {
             while (savedFileName.size() > fileLimit) {
                 savedFileName.remove(0);
             }
-//            for (int i = 0; i < savedFileName.size(); i++){
-//                String tempFileName = savedFileName.get(i);
-//                int stringLength = tempFileName.length();
-//                String str = "";
-//                str += tempFileName.substring(stringLength -10,stringLength - 8);
-//                str += "년 ";
-//                str += tempFileName.substring(stringLength -8,stringLength - 6);
-//                str += "월 ";
-//                str += tempFileName.substring(stringLength -6,stringLength - 4);
-//                str += "일 ";
-//                mappingFileNameAndList.put(str,tempFileName);
-//                viewListFofFile.add(str);
-//            }
-
         }
+    }
+
+    public String[] getStringFromFilename(String fname) {
+        int stringLength = fname.length();
+        String[] str = new String[3];
+        str[0] = fname.substring(stringLength - 10, stringLength - 8);
+        str[0] += "년";
+        str[1] = fname.substring(stringLength - 8, stringLength - 6);
+        str[1] += "월";
+        str[2] = fname.substring(stringLength - 6, stringLength - 4);
+        str[2] += "일";
+        return str;
     }
 
     private void parseUserFile(String line) {
@@ -197,26 +295,22 @@ public class FileManager {
         Log.d(TAG, "LOAD PARSING::PROFILE::" + temp[0] + ":" + temp[1] + ":" + temp[2]);
         Log.d(TAG, "LOAD PARSING::EVENT TYPE::" + temp[3]);
         temp[3] = String.valueOf(temp[3]);
-        logTotal.put(temp[6], temp[4]);
-        if (temp[3].equals(eventType[0])) {       //water
-            todayDrink += Integer.valueOf(temp[4]);
-            preSetter[0] = temp[4];
-            logDrink.put(temp[6], temp[4]);
-            Log.d(TAG, "LOAD PARSING::EVENT water::" + temp[4]);
-        } else if (temp[3].equals(eventType[1])) {  //meal
-            preSetter[1] = temp[6] + " (" + temp[4] + ")";
-            logMealTime.put(temp[6], temp[4]);
-            Log.d(TAG, "LOAD PARSING::EVENT meal::" + temp[4]);
-        } else if (temp[3].equals(eventType[2])) {  //sleep
-            preSetter[2] = temp[6] + " (" + temp[4] + ")";
-            logSleepTime.put(temp[6], temp[4]);
-            Log.d(TAG, "LOAD PARSING::EVENT sleep::" + temp[4]);
-        } else if (temp[3].equals(eventType[3])) {  //urine
-            todayUrine += Integer.valueOf(temp[4]);
-            preSetter[3] = temp[4];
-            logUrine.put(temp[6], temp[4]);
-            Log.d(TAG, "LOAD PARSING::EVENT urine::" + temp[4]);
-        }
+//        if (temp[3].equals(eventType[0])) {       //water
+//            todayDrink += Integer.valueOf(temp[4]);
+//            preSetter[0] = temp[4];
+//            Log.d(TAG, "LOAD PARSING::EVENT water::" + temp[4]);
+//        } else if (temp[3].equals(eventType[1])) {  //meal
+//            preSetter[1] = temp[6] + " (" + temp[4] + ")";
+//            Log.d(TAG, "LOAD PARSING::EVENT meal::" + temp[4]);
+//        } else if (temp[3].equals(eventType[2])) {  //sleep
+//            preSetter[2] = temp[6] + " (" + temp[4] + ")";
+//            Log.d(TAG, "LOAD PARSING::EVENT sleep::" + temp[4]);
+//        } else if (temp[3].equals(eventType[3])) {  //urine
+//            todayUrine += Integer.valueOf(temp[4]);
+//            preSetter[3] = temp[4];
+//            Log.d(TAG, "LOAD PARSING::EVENT urine::" + temp[4]);
+//        }
+        allData.add(new DiaryData(read_profile, temp[6], temp[3], temp[4]));
     }
 
     private boolean isFileExist(File file) {
@@ -273,29 +367,10 @@ public class FileManager {
         return savedFileName;
     }
 
-    public Map<String, String> getLogSleepTime() {
-        return logSleepTime;
+    public ArrayList<DiaryData> getAllData() {
+        return allData;
     }
 
-    public Map<String, String> getLogMealTime() {
-        return logMealTime;
-    }
-
-    public Map<String, String> getLogDrink() {
-        return logDrink;
-    }
-
-    public Map<String, String> getLogUrine() {
-        return logUrine;
-    }
-
-    //    public Map<String,String> getMappingFileNameAndList() {
-//        return mappingFileNameAndList;
-//    }
-//
-//    public ArrayList<String> getViewListFofFile(){
-//        return viewListFofFile;
-//    }
     public int getTodayDrink() {
         return todayDrink;
     }
@@ -307,4 +382,5 @@ public class FileManager {
     public String[] getPreSetter() {
         return preSetter;
     }
+
 }

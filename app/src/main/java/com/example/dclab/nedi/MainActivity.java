@@ -6,18 +6,15 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,10 +49,10 @@ public class MainActivity extends AppCompatActivity {
 
     private String[] timer = {"오늘", "0", "0"}; // day, hour, minutes
 
-    private final String[] ExtraMenuList = {"야뇨증에 대해서", "일지 파일 확인", "결과 파일 추출"};
+    private final String[] ExtraMenuList = {"야뇨증에 대해서", "일지 확인 및 수정", "진료 파일 추출"};
     private final String[] mDays = {"오늘", "어제"};
     private final String[] mHours = {"오전 0시", "오전 1시", "오전 2시", "오전 3시", "오전 4시", "오전 5시", "오전 6시",
-            "오전 7시", "오전 8시", "오전 9시", "오전 10시", "오전 11시", "오전 12시",
+            "오전 7시", "오전 8시", "오전 9시", "오전 10시", "오전 11시", "오후 12시",
             "오후 1시", "오후 2시", "오후 3시", "오후 4시", "오후 5시", "오후 6시", "오후 7시", "오후 8시", "오후 9시", "오후 10시", "오후 11시"};
     private final String[] mMinutes = {"0분", "10분", "20분", "30분", "40분", "50분"};
     private final String[] mCCs = new String[41];
@@ -93,28 +90,48 @@ public class MainActivity extends AppCompatActivity {
         text_last_mealTime = findViewById(R.id.text_meal);
         text_today_drink = findViewById(R.id.text_drink);
         text_today_urine = findViewById(R.id.text_urine);
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        today_drink = 0;
+        today_urine = 0;
+        try {
+            mFileManager.loadUserFile(client_id);
+        } catch (Exception e) {
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        }
+        profile = mFileManager.getRead_profile();
+        String[] preSetter = mFileManager.getPreSetter();
+        today_drink = mFileManager.getTodayDrink();
+        today_urine = mFileManager.getTodayUrine();
+
+        final Intent intent = getIntent();
+        if (intent.getStringExtra(NAME) != null) {
+            profile[0] = intent.getStringExtra(NAME);
+            profile[1] = intent.getStringExtra(SEX);
+            profile[2] = intent.getStringExtra(AGE);
+            today_urine = 0;
+            today_drink = 0;
         }
 
-        return super.onOptionsItemSelected(item);
+        if ((profile[0] == null) || (profile[1] == null) || (profile[2] == null)) {
+            profile_setter();
+        } else {
+            text_profile_name.setText(profile[0]);
+            text_profile_sex.setText(profile[1]);
+            text_profile_age.setText(profile[2]);
+            if (preSetter[1] != null) {
+                text_last_mealTime.setText(preSetter[1]);
+            } else {
+                text_last_mealTime.setText("기록 없음");
+            }
+            if (preSetter[2] != null) {
+                text_last_sleepTime.setText(preSetter[2]);
+            } else {
+                text_last_sleepTime.setText("기록 없음");
+            }
+            text_today_drink.setText(String.valueOf(today_drink) + "cc");
+            text_today_urine.setText(String.valueOf(today_urine) + "cc");
+        }
     }
 
     Button.OnClickListener mainClickListener = new View.OnClickListener() {
@@ -176,8 +193,10 @@ public class MainActivity extends AppCompatActivity {
                 d.setTitle("기상 및 취침 시간");
             }
             d.setContentView(R.layout.dialog_meal);
+            final RadioGroup group = d.findViewById(R.id.radio_meal_group);
             final RadioButton Meal = d.findViewById(R.id.radioButton);
             final RadioButton Sweet = d.findViewById(R.id.radioButton2);
+            group.check(R.id.radioButton);
             if (thisType == 2) {
                 Meal.setText("기상");
                 Sweet.setText("취침");
@@ -207,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
                     timer[2] = String.valueOf(mMinutes[mMinute.getValue()]);
                     String tempEventText = "";
                     if (thisType == 1) {
-                        tempEventText = "식사";
+//                        tempEventText = "식사";
                         if (Meal.isChecked()) {
                             tempEventText = "정식";
                         } else if (Sweet.isChecked()) {
@@ -216,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
                         mFileManager.saveUserFile(client_id, profile, tempEventText, timer, thisType);
                         text_last_mealTime.setText(timer[1] + " " + timer[2] + " (" + tempEventText + ")");
                     } else {
-                        tempEventText = "수면";
+//                        tempEventText = "수면";
                         if (Meal.isChecked()) {
                             tempEventText = "기상";
                         } else if (Sweet.isChecked()) {
@@ -224,6 +243,18 @@ public class MainActivity extends AppCompatActivity {
                         }
                         mFileManager.saveUserFile(client_id, profile, tempEventText, timer, thisType);
                         text_last_sleepTime.setText(timer[1] + " " + timer[2] + " (" + tempEventText + ")");
+                    }
+                    mFileManager.loadUserFile(client_id);
+                    String[] preSetter = mFileManager.getPreSetter();
+                    if (preSetter[1] != null) {
+                        text_last_mealTime.setText(preSetter[1]);
+                    } else {
+                        text_last_mealTime.setText("기록 없음");
+                    }
+                    if (preSetter[2] != null) {
+                        text_last_sleepTime.setText(preSetter[2]);
+                    } else {
+                        text_last_sleepTime.setText("기록 없음");
                     }
 //                    Toast.makeText(MainActivity.this,timer[0]+timer[1]+timer[2], Toast.LENGTH_SHORT).show();
                     d.dismiss();
@@ -302,11 +333,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String tempEventText = mCCs[getCc.getValue()];
                 if (thisType == 0) {
-                    today_drink += Integer.parseInt(mCCs[getCc.getValue()]);
+                    if (timer[0].equals(mDays[0])) {
+                        today_drink += Integer.parseInt(mCCs[getCc.getValue()]);
+                    }
                     mFileManager.saveUserFile(client_id, profile, tempEventText, timer, thisType);
                     text_today_drink.setText(String.valueOf(today_drink) + "cc");
                 } else {
-                    today_urine += Integer.parseInt(tempEventText);
+                    if (timer[0].equals(mDays[0])) {
+                        today_urine += Integer.parseInt(tempEventText);
+                    }
                     mFileManager.saveUserFile(client_id, profile, tempEventText, timer, thisType);
                     text_today_urine.setText(String.valueOf(today_urine) + "cc");
                 }
@@ -332,9 +367,55 @@ public class MainActivity extends AppCompatActivity {
                 String selectedText = items[pos].toString();
 //                            String filename = Dictionary.get(selectedText);
                 Toast.makeText(MainActivity.this, selectedText, Toast.LENGTH_SHORT).show();
-                final Intent intent = new Intent(getApplicationContext(), DiaryList.class);
-                intent.putExtra(DiaryList.FILENAME, selectedText);
+                final Intent intent = new Intent(getApplicationContext(), DiaryListActivity.class);
+                intent.putExtra(DiaryListActivity.FILENAME, selectedText);
                 startActivity(intent);
+            }
+        });
+        builder.show();
+    }
+
+    void showSavedListForResult() {
+        final ArrayList<Integer> selectedItems = new ArrayList<>();
+        boolean[] itemChecked = new boolean[selectedItems.size()];
+        mFileManager.searchSavedFile();
+        final ArrayList<String> FileNames = mFileManager.getSavedFileName();
+//                    ArrayList<String> FileNames = mFileManager.getViewListFofFile();
+//                    final Map<String, String> Dictionary = mFileManager.getMappingFileNameAndList();
+
+        final CharSequence[] items = FileNames.toArray(new String[FileNames.size()]);
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle("진료 결과 추출 날짜");
+        builder.setMultiChoiceItems(items, null,
+                new DialogInterface.OnMultiChoiceClickListener() {
+                    public void onClick(DialogInterface dialog, int item, boolean isChecked) {
+                        Log.i("Dialogos", "option selected: " + items[item]);
+
+                        if (isChecked) {
+                            selectedItems.add(item);
+                        } else if (selectedItems.contains(item)) {
+                            selectedItems.remove(Integer.valueOf(item));
+                        }
+                    }
+                });
+        builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String selectedIndex = "";
+                for (int i = 0; i < selectedItems.size(); i++) {
+                    selectedIndex += FileNames.get(selectedItems.get(i)) + ",";
+                }
+                final Intent intent = new Intent(getApplicationContext(), ResultActivity.class);
+                Log.i("dialog test", selectedIndex);
+                intent.putExtra(ResultActivity.FILENAMES, selectedIndex);
+                startActivity(intent);
+                //showToast("Selected index: " + selectedIndex);
+            }
+        });
+        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
             }
         });
         builder.show();
@@ -352,13 +433,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int pos) {
                 String selectedText = items[pos].toString();
 //                            String filename = Dictionary.get(selectedText);
-                Toast.makeText(MainActivity.this, selectedText, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity.this, selectedText, Toast.LENGTH_SHORT).show();
                 if (selectedText.equals(ExtraMenuList[0])) {
-
+                    final Intent intent = new Intent(getApplicationContext(), AboutNEActivity.class);
+                    startActivity(intent);
                 } else if (selectedText.equals(ExtraMenuList[1])) {
                     showSavedList();
                 } else if (selectedText.equals(ExtraMenuList[2])) {
-
+                    showSavedListForResult();
                 }
             }
         });
@@ -376,40 +458,27 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        today_drink = 0;
-        today_urine = 0;
-        try {
-            mFileManager.loadUserFile(client_id);
-        } catch (Exception e) {
-
-        }
-        profile = mFileManager.getRead_profile();
         String[] preSetter = mFileManager.getPreSetter();
-        today_drink = mFileManager.getTodayDrink();
-        today_urine = mFileManager.getTodayUrine();
-
         final Intent intent = getIntent();
         if (intent.getStringExtra(NAME) != null) {
             profile[0] = intent.getStringExtra(NAME);
             profile[1] = intent.getStringExtra(SEX);
             profile[2] = intent.getStringExtra(AGE);
+            preSetter =new String[] {null,null,null,null};
             today_urine = 0;
             today_drink = 0;
+            text_today_drink.setText(String.valueOf(today_drink) + "cc");
+            text_today_urine.setText(String.valueOf(today_urine) + "cc");
         }
-        text_profile_name.setText(profile[0]);
-        text_profile_sex.setText(profile[1]);
-        text_profile_age.setText(profile[2]);
-        if (preSetter[1] != null){
+        if (preSetter[1] != null) {
             text_last_mealTime.setText(preSetter[1]);
-        }else{
+        } else {
             text_last_mealTime.setText("기록 없음");
         }
-        if (preSetter[1] != null){
+        if (preSetter[2] != null) {
             text_last_sleepTime.setText(preSetter[2]);
-        }else{
+        } else {
             text_last_sleepTime.setText("기록 없음");
         }
-        text_today_drink.setText(String.valueOf(today_drink) + "cc");
-        text_today_urine.setText(String.valueOf(today_urine) + "cc");
     }
 }

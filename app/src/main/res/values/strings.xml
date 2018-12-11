@@ -3,4 +3,6 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="title_activity_diary_list">DiaryList</string>
+    <string name="title_activity_result">ResultActivity</string>
+    <string name="title_activity_about_ne">AboutNEActivity</string>
 </resources>
