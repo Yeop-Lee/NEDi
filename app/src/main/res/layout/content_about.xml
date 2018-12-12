@@ -34,10 +34,9 @@
                 android:id="@+id/textView_text1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:justificationMode="inter_word"
+                android:gravity="start|end"
                 android:layout_below="@+id/textView_title1"
-                android:text="   야뇨증이란, 만 5세 이상의 아동이, 한 달에 한 번 이상, 3개월 이상, 수면 중에 오줌을 쌀 때 정의합니다. 밤에 깨어나서 화장실을 가는 것은 의학용어로 ‘야간뇨’라고 하며, 이는 깨어나지 않고 싸버리는 ‘야뇨’와는 다릅니다. 야간뇨는 주로 성인에서 나타나지만 아동에서 나타나는 경우도 있습니다.
-\n\n  전 세계적으로, 만 5세 아동의 20%에서, 만 7세 아동의 10-15%에서 발견이 될 정도로 흔한 질환입니다. 나이가 들수록 줄어드는 경향을 보이지만, 1% 정도에서는 성인기까지 지속되기도 합니다."
+                android:text="  야뇨증이란, 만 5세 이상의 아동이, 한 달에 한 번 이상, 3개월 이상, 수면 중에 오줌을 쌀 때 정의합니다. 밤에 깨어나서 화장실을 가는 것은 의학용어로 ‘야간뇨’라고 하며, 이는 깨어나지 않고 싸버리는 ‘야뇨’와는 다릅니다. 야간뇨는 주로 성인에서 나타나지만 아동에서 나타나는 경우도 있습니다.\n\n  전 세계적으로, 만 5세 아동의 20%에서, 만 7세 아동의 10 - 15%에서 발견이 될 정도로 흔한 질환입니다. 나이가 들수록 줄어드는 경향을 보이지만, 1% 정도에서는 성인기까지 지속되기도 합니다."
                 android:textSize="15dp" />
 
 
@@ -58,8 +57,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/textView_title2"
-                android:justificationMode="inter_word"
                 android:layout_marginTop="15dp"
+                android:gravity="start|end"
                 android:text="  이렇게 아이가 나이가 들수록 줄어드는 야뇨증을 왜 치료해야 하나요? 예전에는 야뇨증을 ‘치료하지 않아도 되는 질환’으로 인식하기도 하였습니다. 지금도 후진국들에서는 야뇨증을 병으로 보지 않는 경향이 강합니다. 그러나, 야뇨증이 아동의 자존감과 인격형성에 문제를 일으키고, 수면을 악화시켜 인지 및 학습능력을 저하시키는 부분이 밝혀졌으며, 나아가 야뇨증 치료 후 이런 부분이 뚜렷하게 개선된다는 사실이 알려지면서 선진국에서부터 야뇨증을 더 적극적으로 치료하게 되었습니다.
 \n\n  또한, 야뇨증은 부모에게도 정신적 고통을 주어 가정불화를 일으킬 수 있으며, 부모의 수면도 악화되어 사회경제적 활동에도 지장을 주게 된다는 사실도 알려지고 있으며, 아동의 사회적 활동 (유치원 캠프 등)이 늘어나면서, 사회적으로도 야뇨증 치료에 대한 요구가 늘고 있습니다."
                 android:textSize="15dp" />
@@ -84,7 +83,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/textView_title3"
                 android:layout_marginTop="15dp"
-                android:justificationMode="inter_word"
+                android:gravity="start|end"
                 android:text="  낮에는 배뇨에 아무 문제가 없는데 밤에 야뇨만 있는 경우를 ‘단일증상성’ 야뇨증이라고합니다. 반면, 낮에도 배뇨에 문제가 있으면서 (자주 보는 증상, 급하게 마려워 하거나 지리는 증상, 과도하게 참는 증상 등) 밤에도 야뇨가 있는 경우를 ‘비단일증상성’ 야뇨증이라고 합니다. 단일증상성 야뇨증인 경우 일반적인 야뇨증치료를 하게 되며, 비단일증상성 야뇨증인 경우 낮증상에 대한 치료가 선행되어야 합니다."
                 android:textSize="15dp" />
 
@@ -105,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/textView_title4"
                 android:layout_marginTop="15dp"
-                android:justificationMode="inter_word"
+                android:gravity="start|end"
                 android:text="그러면 야뇨증은 왜 생길까요? 낮에도 문제가 있는 비단일증상성 야뇨증의 경우는 낮에 있던 문제가 밤까지 이어지는 것으로 생각하므로, 여기서는 단일증상성 야뇨증의 경우를 설명 드리겠습니다."
                 android:textSize="15dp" />
 
@@ -125,7 +124,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/textView_title5"
                 android:layout_marginTop="15dp"
-                android:justificationMode="inter_word"
+                android:gravity="start|end"
                 android:text="- 우리 몸은 소변을 끊임없이 만들어내는데, 낮에 만들어 내는 속도만큼 밤에도 만들게 되면 안되므로, 밤 중에는 소변을 적게 만드는 호르몬이 분비되게 됩니다. 이 호르몬을 ‘항이뇨 호르몬’이라고 합니다.
 \n\n- 1980년대 북유럽 연구에서 야뇨증이 있는 아이들이 없는 아이들에 비해 이 항이뇨 호르몬 분비가 적다는 것이 밝혀졌습니다. 그 전까지는 야뇨증의 원인을 ‘심리적 요인’에서 찾았으나, 이 연구 이후, 본격적인 현대 야뇨증 치료가 시작되게 되었습니다.
 \n\n- 그러나, 실제 이 호르몬이 부족해서 소변량이 과다한 경우는 전체 야뇨증의 50% 미만으로 알려지고 있어서, 한가지 중요한 원인이 되기는 하지만, 모든 야뇨증을 이것으로 설명하지는 않습니다."
@@ -147,7 +146,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/textView_title6"
                 android:layout_marginTop="15dp"
-                android:justificationMode="inter_word"
+                android:gravity="start|end"
                 android:text="- 우리 몸의 방광은 어느 정도 소변이 차게 되면 여러 가지 신호들을 만들게 됩니다. 또, 어느 이상 소변이 차면 수축을 하게 됩니다. 이것이 남들보다 적은 상태에서 일어나게 되면 야뇨증이 생길 수 있습니다.
 \n\n- 야뇨증의 잘 치료되지 않는 아이들에서 시행된 연구에서, 이 아이들의 방광수축이 과도하다는 것들이 밝혀져 있으며, 변비 등이 이를 악화시키기도 합니다."
                 android:textSize="15dp" />
@@ -169,7 +168,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/textView_title7"
                 android:layout_marginTop="15dp"
-                android:justificationMode="inter_word"
+                android:gravity="start|end"
                 android:text="- 야간 소변량이 많던, 방광크기가 작던, 깨어나서 화장실을 가지 못하고, 못 일어나는 것이 각성의 문제입니다. 실제로 야뇨증이 있는 아이들을 깨우기 위해서는 더 ‘강한 자극’이 필요하다는 것이 알려져 있습니다.
 \n\n- 과거에는 아이가 ‘깊은 잠을 자서’ 못 일어나는 것으로 생각하였으나, 2000년대 이후에는 오히려 ‘옅은 잠을 자서’ 못 일어나는 것으로 생각하기도 합니다. 앞의 소변량이나 방광크기의 문제로 방광이 지속적인 자극을 만들어내면 정말 중요한 순간에 인지를 못한다는 것입니다. 화재경보기가 (울리면 안되는 순간에) 자주 울리다 보면, 정말 화재가 나서 울릴 때 심각하게 인지하지 못하는 것에 비유할 수 있습니다."
                 android:textSize="15dp" />
@@ -180,7 +179,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/textView_text7"
                 android:layout_marginTop="15dp"
-                android:justificationMode="inter_word"
+                android:gravity="start|end"
                 android:text="위의 소변량, 방광크기, 각성문제는 전통적으로 야뇨증을 설명하는 3대 원인입니다. 그러나, 최근에는 이보다 더 복잡한 과정이 있을 것으로 생각합니다. 수면 중 혈압, 변비, 수면무호흡 등 여러가지 요인들이 관여되어 있을 것으로 생각합니다."
                 android:textSize="15dp" />
 
@@ -201,7 +200,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/textView_title8"
                 android:layout_marginTop="15dp"
-                android:justificationMode="inter_word"
+                android:gravity="start|end"
                 android:text="   우선 야뇨증이 단일증상성 야뇨증인지, 비단일증상성 야뇨증인지에 대해 검사를 먼저 하게 됩니다. 기본적인 배뇨상태를 점검하게 되고, 변비가 동반되어 있지는 않은 지, 소변검사에서 염증이 없는 지도 확인되어야 합니다. 가장 중요한 검사는 방광일지 입니다. 만3일간 하루 종일 소변보는 양과 시간을 기록하는 것입니다. 밤에 잘 때 싸는 양을 알아야 하므로, 일시적으로 기저귀를 채운 후 젖은 기저귀에서 새 기저귀 무게를 빼는 방법으로 체크를 해야 합니다. 아침에 일어나서 처음 보는 소변은 전날 밤 동안 만든 소변이므로, 이 부분도 반드시 체크가 되어야 합니다."
                 android:textSize="15dp" />
 
