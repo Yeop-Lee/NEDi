@@ -35,8 +35,8 @@
             android:label="@string/title_activity_result"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".AboutNEActivity"
-            android:label="@string/title_activity_about_ne"
+            android:name=".AboutActivity"
+            android:label="@string/title_activity_about"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

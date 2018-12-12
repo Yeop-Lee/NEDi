@@ -2,76 +2,101 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
-    <RadioGroup
-        android:id="@+id/radio_meal_group"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:orientation="horizontal">
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="25dp"
+            android:textColor="@color/colorWhite"
+            android:text="TextView"
+            android:background="@drawable/bg_sleep"/>
+        <RadioGroup
+            android:id="@+id/radio_meal_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:orientation="horizontal">
 
-        <RadioButton
-            android:id="@+id/radioButton"
+            <RadioButton
+                android:id="@+id/radioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="정식" />
+
+            <RadioButton
+                android:id="@+id/radioButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="간식" />
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/msg_cc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="정식" />
+            android:layout_gravity="center_horizontal"
+            android:text="현재 시간 기준으로 10분 단위로 변경합니다." />
 
-        <RadioButton
-            android:id="@+id/radioButton2"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="간식" />
+            android:orientation="horizontal">
 
-    </RadioGroup>
+            <NumberPicker
+                android:id="@+id/numberPickerDay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_weight="1" />
 
-    <NumberPicker
-        android:id="@+id/numberPickerDay"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="64dp"
-        android:layout_marginRight="20dp"
-        android:layout_toLeftOf="@+id/numberPickerHour" />
+            <NumberPicker
+                android:id="@+id/numberPickerHour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_weight="1" />
 
-    <NumberPicker
-        android:id="@+id/numberPickerHour"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="64dp" />
+            <NumberPicker
+                android:id="@+id/numberPickerMinute"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="15dp"
+                android:layout_weight="1" />
 
-    <NumberPicker
-        android:id="@+id/numberPickerMinute"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="64dp"
-        android:layout_toRightOf="@+id/numberPickerHour" />
+        </LinearLayout>
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/numberPickerDay"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="98dp"
-        android:layout_toRightOf="@+id/numberPickerHour"
-        android:text="확인" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/button2"
-        android:layout_alignBottom="@+id/button2"
-        android:layout_marginRight="16dp"
-        android:layout_toLeftOf="@+id/numberPickerHour"
-        android:text="취소" />
+
+            <Button
+                android:id="@+id/button1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="취소" />
+
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="확인" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </RelativeLayout>

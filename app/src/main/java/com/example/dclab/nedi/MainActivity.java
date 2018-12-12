@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.RadioButton;
@@ -188,12 +189,21 @@ public class MainActivity extends AppCompatActivity {
         final int thisType = type;
         if (thisType == 1 || thisType == 2) {
             final Dialog d = new Dialog(MainActivity.this);
-            if (thisType == 1) {
-                d.setTitle("식사가 끝나는 시간");
-            } else {
-                d.setTitle("기상 및 취침 시간");
-            }
+//            if (thisType == 1) {
+//                d.setTitle("식사가 끝나는 시간");
+//            } else {
+//                d.setTitle("기상 및 취침 시간");
+//            }
+            d.requestWindowFeature(Window.FEATURE_NO_TITLE);
             d.setContentView(R.layout.dialog_meal);
+            TextView header = d.findViewById(R.id.header);
+            if (thisType == 1) {
+                header.setText("식사가 끝나는 시간");
+                header.setBackgroundResource(R.drawable.bg_meal_title);
+            } else {
+                header.setText("기상 및 취침 시간");
+                header.setBackgroundResource(R.drawable.bg_sleep_title);
+            }
             final RadioGroup group = d.findViewById(R.id.radio_meal_group);
             final RadioButton Meal = d.findViewById(R.id.radioButton);
             final RadioButton Sweet = d.findViewById(R.id.radioButton2);
@@ -264,15 +274,24 @@ public class MainActivity extends AppCompatActivity {
             d.show();
         } else {
             final Dialog d = new Dialog(MainActivity.this);
-            if (thisType == 0) {
-                d.setTitle("물을 마신 시간");
-            } else if (thisType == 3) {
-                d.setTitle("소변 배출 시간");
-            }
+//            if (thisType == 0) {
+//                d.setTitle("물을 마신 시간");
+//            } else if (thisType == 3) {
+//                d.setTitle("소변 배출 시간");
+//            }
             for (int i = 0; i < mCCs.length; i++) {
                 mCCs[i] = String.valueOf(i * 10);
             }
+            d.requestWindowFeature(Window.FEATURE_NO_TITLE);
             d.setContentView(R.layout.dialog_sleep);
+            TextView header = d.findViewById(R.id.header);
+            if (thisType == 0) {
+                header.setText("물을 마신 시간");
+                header.setBackgroundResource(R.drawable.bg_drink_title);
+            } else if(thisType == 3){
+                header.setText("소변 배출 시간");
+                header.setBackgroundResource(R.drawable.bg_urine_title);
+            }
             final NumberPicker mDay = d.findViewById(R.id.numberPickerDay);
             final NumberPicker mHour = d.findViewById(R.id.numberPickerHour);
             final NumberPicker mMinute = d.findViewById(R.id.numberPickerMinute);
@@ -312,15 +331,24 @@ public class MainActivity extends AppCompatActivity {
     public void showCCCheker(int type) {
         final int thisType = type;
         final Dialog d = new Dialog(MainActivity.this);
-        if (thisType == 0) {
-            d.setTitle("수분섭취기록");
-        } else {
-            d.setTitle("소변측정기록");
-        }
+//        if (thisType == 0) {
+//            d.setTitle("수분섭취기록");
+//        } else {
+//            d.setTitle("소변측정기록");
+//        }
+        d.requestWindowFeature(Window.FEATURE_NO_TITLE);
         d.setContentView(R.layout.dialog_cc_get);
         final NumberPicker getCc = d.findViewById(R.id.numberPickerCC);
         numberPickSetter(getCc, mCCs);
         getCc.setValue(19);
+        TextView header = d.findViewById(R.id.header);
+        if (thisType == 0) {
+            header.setText("수분섭취기록");
+            header.setBackgroundResource(R.drawable.bg_drink_title);
+        } else {
+            header.setText("소변측정기록");
+            header.setBackgroundResource(R.drawable.bg_urine_title);
+        }
         Button b1 = d.findViewById(R.id.button1);
         Button b2 = d.findViewById(R.id.button2);
         b1.setOnClickListener(new View.OnClickListener() {
@@ -436,7 +464,7 @@ public class MainActivity extends AppCompatActivity {
 //                            String filename = Dictionary.get(selectedText);
 //                Toast.makeText(MainActivity.this, selectedText, Toast.LENGTH_SHORT).show();
                 if (selectedText.equals(ExtraMenuList[0])) {
-                    final Intent intent = new Intent(getApplicationContext(), AboutNEActivity.class);
+                    final Intent intent = new Intent(getApplicationContext(), AboutActivity.class);
                     startActivity(intent);
                 } else if (selectedText.equals(ExtraMenuList[1])) {
                     showSavedList();
