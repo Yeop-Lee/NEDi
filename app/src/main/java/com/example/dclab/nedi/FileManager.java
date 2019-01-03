@@ -18,7 +18,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -28,9 +27,13 @@ public class FileManager {
 
     private String filename;
 
+    public String cliendID;
+
     private String[] preSetter = {null, null, null, null};
     private int todayDrink = 0;
     private int todayUrine = 0;
+    public int sleepFlag = 0;
+    public int wakeUpFlag = 0;
 
     private String[] eventType = {"Water cc", "Meal Time", "Sleep Time", "Urin cc"};
     private String[] read_profile = {null, null, null};
@@ -48,16 +51,29 @@ public class FileManager {
 
     }
 
-    public void saveUserFile(int patientNum, String[] profile, String event, String[] time, int type) {
+//    public void saveCreateFile(String[] profile) {
+//        Log.v(TAG, "save data started");
+//        if (profile[0] == null || profile[1] == null || profile[2] == null) {
+//            Log.e(TAG, "cannot save");
+//        } else {
+//            read_profile = profile;
+//            cliendID = read_profile[0] + "-" + read_profile[1] + "-" + read_profile[2];
+//            FileOutputStream fos;
+//            createFile(filename);
+//        }
+//    }
+
+    public void saveUserFile(String[] profile, String event, String[] time, int type) {
         Log.v(TAG, "save data started");
         if (profile[0] == null || profile[1] == null || profile[2] == null) {
             Log.e(TAG, "cannot save");
         } else {
             read_profile = profile;
+            cliendID = read_profile[0] + "-" + read_profile[1] + "-" + read_profile[2];
             if (time[0].equals(mDays[0])) {
-                filename = setFileName(patientNum);
+                filename = setFileName(cliendID);
             } else {
-                filename = setFileName_Yesterday(patientNum);
+                filename = setFileName_Yesterday(cliendID);
             }
             FileOutputStream fos;
             createFile(filename);
@@ -88,21 +104,22 @@ public class FileManager {
             parseData();
         }
     }
+
     public Boolean loadByNameTomorrow(String fname) {
         String client_id = fname.split("_")[0];
-        String yesterdayAsString = "";
-        SimpleDateFormat formatter = new SimpleDateFormat(client_id+"_yyMMdd", Locale.getDefault());
+        String tomorrowAsString = "";
+        SimpleDateFormat formatter = new SimpleDateFormat(client_id + "_yy년MM월dd일", Locale.getDefault());
         try {
             Date date = formatter.parse(fname);
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
             calendar.add(Calendar.DATE, +1);
-            yesterdayAsString = formatter.format(calendar.getTime());
+            tomorrowAsString = formatter.format(calendar.getTime());
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        filename = yesterdayAsString+".csv";
-        Log.i("Tomorrow file",filename);
+        filename = tomorrowAsString + ".csv";
+        Log.i("Tomorrow file", filename);
         File dir = makeDirectory(STRSAVEPATH);
         File file = new File(STRSAVEPATH + filename);
 
@@ -110,30 +127,73 @@ public class FileManager {
             Log.v(TAG, "Fail LOAD DATA");
             return false;
         } else {
-            Log.v(TAG, "Success LOAD DATA");
+            Log.v(TAG, "Success Tomorrow LOAD DATA");
             parseData();
             return true;
         }
     }
 
-    public void loadUserFile(int patientNum) {
-        filename = setFileName(patientNum);
+    public Boolean loadByNameYesterday(String fname) {
+        String client_id = fname.split("_")[0];
+        String yesterdayAsString = "";
+        SimpleDateFormat formatter = new SimpleDateFormat(client_id + "_yy년MM월dd일", Locale.getDefault());
+        try {
+            Date date = formatter.parse(fname);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.add(Calendar.DATE, -1);
+            yesterdayAsString = formatter.format(calendar.getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        filename = yesterdayAsString + ".csv";
+        Log.i("Tomorrow file", filename);
         File dir = makeDirectory(STRSAVEPATH);
         File file = new File(STRSAVEPATH + filename);
 
         if (isFileExist(file) == false) {
-            searchSavedFile();
-            filename = savedFileName.get(savedFileName.size() - 1);
-            parseData();
-            todayDrink = 0;
-            todayUrine = 0;
+            Log.v(TAG, "Fail LOAD DATA");
+            return false;
         } else {
-            Log.v(TAG, "LOAD DATA");
+            Log.v(TAG, "Success Yesterday LOAD DATA");
             parseData();
+            return true;
+        }
+    }
+
+    public void loadUserFile() {
+//        filename = setFileName(patientNum);
+//        File dir = makeDirectory(STRSAVEPATH);
+//        File file = new File(STRSAVEPATH + filename);
+//
+//        if (isFileExist(file) == false) {
+//            searchSavedFile();
+//            filename = savedFileName.get(savedFileName.size() - 1);
+//            parseData();
+//            todayDrink = 0;
+//            todayUrine = 0;
+//        } else {
+//            Log.v(TAG, "LOAD DATA");
+//            parseData();
+//        }
+        searchSavedFile();
+        filename = savedFileName.get(savedFileName.size() - 1);
+        String client_id = filename.split("_")[0];
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat dateFormat_forPath = new SimpleDateFormat("yy년MM월dd일");
+        String filePathDate = String.format(dateFormat_forPath.format(c.getTime()));
+        String temp_filename = String.valueOf(client_id) + "_" + filePathDate + ".csv";
+
+        if (temp_filename.equals(filename)) { //TODAY file
+            loadByNameYesterday(filename);
         }
 
+        searchSavedFile();
+        filename = savedFileName.get(savedFileName.size() - 1);
+        parseData();
+
         allData = sortedByTime(allData);
-        for (int i = 0; i<allData.size();i++){
+        for (int i = 0; i < allData.size(); i++) {
             if (allData.get(i).EventType.equals(eventType[0])) {       //water
                 todayDrink += Integer.valueOf(allData.get(i).EventContents);
                 preSetter[0] = allData.get(i).EventContents;
@@ -149,6 +209,14 @@ public class FileManager {
                 preSetter[3] = allData.get(i).EventContents;
 //                Log.d(TAG, "LOAD PARSING::EVENT urine::" + allData.get(i).EventContents);
             }
+        }
+
+        if (!(temp_filename.equals(filename))) {
+            preSetter[1] = null;
+            preSetter[2] = null;
+            todayDrink = 0;
+            todayUrine = 0;
+            wakeUpFlag = 0;
         }
     }
 
@@ -176,10 +244,9 @@ public class FileManager {
     }
 
     public void reviseFile(String fname, ArrayList<DiaryData> totalData) {
-        filename = fname;
         FileWriter fw = null;
         try {
-            fw = new FileWriter(STRSAVEPATH + filename);
+            fw = new FileWriter(STRSAVEPATH + fname);
             PrintWriter pw = new PrintWriter(fw);
             pw.write("");
             pw.flush();
@@ -188,9 +255,9 @@ public class FileManager {
             e.printStackTrace();
         }
         FileOutputStream fos;
-        createFile(filename);
+        createFile(fname);
         try {
-            fos = new FileOutputStream((STRSAVEPATH + filename), true);
+            fos = new FileOutputStream((STRSAVEPATH + fname), true);
             totalData = this.sortedByTime(totalData);
             for (int i = 0; i < totalData.size(); i++) {
                 String text = "";
@@ -229,18 +296,38 @@ public class FileManager {
         return totalData;
     }
 
-    private String setFileName(int patientNum) {
+    public ArrayList<String> sortedByDay(ArrayList<String> totalData) {
+        Collections.sort(totalData, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                try {
+                    String client_id = o1.split("_")[0];
+                    Log.i("client", client_id);
+                    SimpleDateFormat formatter = new SimpleDateFormat(client_id + "_yy년MM월dd일", Locale.getDefault());
+                    Date date1 = formatter.parse(o1);
+                    Date date2 = formatter.parse(o2);
+                    return date1.compareTo(date2);
+                } catch (ParseException e1) {
+                    e1.printStackTrace();
+                }
+                return 0;
+            }
+        });
+        return totalData;
+    }
+
+    private String setFileName(String patientNum) {
         Calendar c = Calendar.getInstance();
-        SimpleDateFormat dateFormat_forPath = new SimpleDateFormat("yyMMdd");
+        SimpleDateFormat dateFormat_forPath = new SimpleDateFormat("yy년MM월dd일");
         String filePathDate = String.format(dateFormat_forPath.format(c.getTime()));
         String temp_filename = String.valueOf(patientNum) + "_" + filePathDate + ".csv";
         return temp_filename;
     }
 
-    private String setFileName_Yesterday(int patientNum) {
+    private String setFileName_Yesterday(String patientNum) {
         Calendar c = Calendar.getInstance();
         c.add(Calendar.DATE, -1);
-        SimpleDateFormat dateFormat_forPath = new SimpleDateFormat("yyMMdd");
+        SimpleDateFormat dateFormat_forPath = new SimpleDateFormat("yy년MM월dd일");
         String filePathDate = String.format(dateFormat_forPath.format(c.getTime()));
         String temp_filename = String.valueOf(patientNum) + "_" + filePathDate + ".csv";
         return temp_filename;
@@ -256,29 +343,30 @@ public class FileManager {
         }
     }
 
-    public void searchSavedFile() {
+    public ArrayList<String> searchSavedFile() {
+        ArrayList<String> tempFileName = new ArrayList<String>();
         savedFileName = new ArrayList<String>();
-        viewListFofFile = new ArrayList<String>();
-        Map<String, String> mappingFileNameAndList = new HashMap<>();
         File dir = makeDirectory(STRSAVEPATH);
         for (File f : dir.listFiles()) {
             if (f.isFile()) {
-                savedFileName.add(String.valueOf(f.getName()));
+                tempFileName.add(String.valueOf(f.getName()));
             }
-            while (savedFileName.size() > fileLimit) {
-                savedFileName.remove(0);
-            }
+//            while (savedFileName.size() > fileLimit) {
+//                savedFileName.remove(0);
+//            }
         }
+        savedFileName = sortedByDay(tempFileName);
+        return savedFileName;
     }
 
     public String[] getStringFromFilename(String fname) {
         int stringLength = fname.length();
         String[] str = new String[3];
-        str[0] = fname.substring(stringLength - 10, stringLength - 8);
+        str[0] = fname.substring(stringLength - 13, stringLength - 11);
         str[0] += "년";
-        str[1] = fname.substring(stringLength - 8, stringLength - 6);
+        str[1] = fname.substring(stringLength - 10, stringLength - 8);
         str[1] += "월";
-        str[2] = fname.substring(stringLength - 6, stringLength - 4);
+        str[2] = fname.substring(stringLength - 7, stringLength - 5);
         str[2] += "일";
         return str;
     }
@@ -312,6 +400,15 @@ public class FileManager {
 //            Log.d(TAG, "LOAD PARSING::EVENT urine::" + temp[4]);
 //        }
         allData.add(new DiaryData(read_profile, temp[6], temp[3], temp[4]));
+        if (temp[3].equals(eventType[2])) {
+            if (temp[4].equals("기상")) {
+                Log.d(TAG, ":기상:" + filename);
+                wakeUpFlag = 1;
+            } else if (temp[4].equals("취침")) {
+                Log.d(TAG, ":취침:" + filename);
+                sleepFlag = 1;
+            }
+        }
     }
 
     private boolean isFileExist(File file) {
@@ -384,4 +481,19 @@ public class FileManager {
         return preSetter;
     }
 
+    public int getSleepFlag() {
+        return sleepFlag;
+    }
+
+    public void setSleepFlag(int sleepFlag) {
+        this.sleepFlag = sleepFlag;
+    }
+
+    public void setWakeUpFlag(int wakeUpFlag) {
+        this.wakeUpFlag = wakeUpFlag;
+    }
+
+    public int getWakeUpFlag() {
+        return wakeUpFlag;
+    }
 }

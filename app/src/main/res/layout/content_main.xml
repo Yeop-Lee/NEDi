@@ -92,7 +92,7 @@
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="10dp"
                 android:layout_toRightOf="@+id/icon_sleep"
-                android:text="수면기록"
+                android:text="수면 기록"
                 android:textColor="@color/colorWhite"
                 android:textSize="35dp"
                 android:textStyle="bold" />
@@ -281,7 +281,7 @@
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="65dp"
+            android:layout_height="90dp"
             android:background="@drawable/bg_sponser" />
 
     </LinearLayout>

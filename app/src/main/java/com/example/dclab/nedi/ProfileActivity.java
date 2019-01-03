@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 public class ProfileActivity extends AppCompatActivity {
     public static final String SET_NAME = "홍길동";
@@ -38,6 +39,7 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        setTitle("개인 정보 입력");
 
         Log.e("Profile_activity", "Success");
 
@@ -52,13 +54,13 @@ public class ProfileActivity extends AppCompatActivity {
         button_set_profile = findViewById(R.id.Button_profile_set);
         button_set_profile.setOnClickListener(profileOnClickListener);
 
-        BoyOrGirl.check(R.id.set_female);
+        BoyOrGirl.check(R.id.set_male);
         set_name = findViewById(R.id.set_name);
         set_age = findViewById(R.id.set_age);
         set_age.setMinValue(0);
         set_age.setMaxValue(Age.length - 1);
         set_age.setDisplayedValues(Age);
-        set_age.setValue(7);//12세
+        set_age.setValue(1);//6세
         set_age.setWrapSelectorWheel(true);
     }
 
@@ -66,17 +68,21 @@ public class ProfileActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             if (view.getId() == R.id.Button_profile_set) {
-                if (male.isChecked()) {
-                    set_sex = "남자";
-                } else if (female.isChecked()) {
-                    set_sex = "여자";
+                if (set_name.getText().toString().matches("")){
+                    Toast.makeText(ProfileActivity.this,"이름을 입력해주세요.",Toast.LENGTH_LONG).show();
+                }else{
+                    if (male.isChecked()) {
+                        set_sex = "남자";
+                    } else if (female.isChecked()) {
+                        set_sex = "여자";
+                    }
+                    final Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    intent.putExtra(MainActivity.NAME, String.valueOf(set_name.getText()));
+                    intent.putExtra(MainActivity.SEX, String.valueOf(set_sex));
+                    intent.putExtra(MainActivity.AGE, String.valueOf(Age[set_age.getValue()]));
+                    startActivity(intent);
+                    finish();
                 }
-                final Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.putExtra(MainActivity.NAME, String.valueOf(set_name.getText()));
-                intent.putExtra(MainActivity.SEX, String.valueOf(set_sex));
-                intent.putExtra(MainActivity.AGE, String.valueOf(Age[set_age.getValue()]));
-                startActivity(intent);
-                finish();
             }
         }
     };

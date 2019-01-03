@@ -48,7 +48,7 @@ public class ResultActivity extends AppCompatActivity {
                 try {
                     String client_id = o1.split("_")[0];
                     Log.i("client",client_id);
-                    SimpleDateFormat formatter = new SimpleDateFormat(client_id+"_yyMMdd", Locale.getDefault());
+                    SimpleDateFormat formatter = new SimpleDateFormat(client_id+"_yy년MM월dd일", Locale.getDefault());
                     Date date1 = formatter.parse(o1);
                     Date date2 = formatter.parse(o2);
                     return date1.compareTo(date2);

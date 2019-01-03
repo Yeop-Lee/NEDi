@@ -26,9 +26,10 @@
                 android:background="@drawable/icon_profile" />
 
             <ImageView
-                android:layout_width="80dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center_horizontal"
+                android:layout_width="110dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
                 android:background="@drawable/bg_title" />
 
             <Button

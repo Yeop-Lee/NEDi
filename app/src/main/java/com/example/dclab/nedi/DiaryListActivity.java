@@ -127,11 +127,15 @@ public class DiaryListActivity extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         flag = 1;
-                        Toast.makeText(getApplicationContext(), "해당 기록을 삭제합니다.", Toast.LENGTH_LONG).show();
-                        mDataList.remove(position);
-                        mListAdapter.clear();
-                        for (int i = 0; i < mDataList.size(); i++) {
-                            mListAdapter.add(mDataList.get(i));
+                        if (mDataList.size() == 1) {
+                            Toast.makeText(getApplicationContext(), "데이터가 한 개 뿐이기 때문에 삭제할 수 없습니다.", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "해당 기록을 삭제합니다.", Toast.LENGTH_LONG).show();
+                            mDataList.remove(position);
+                            mListAdapter.clear();
+                            for (int i = 0; i < mDataList.size(); i++) {
+                                mListAdapter.add(mDataList.get(i));
+                            }
                         }
                     }
                 });
